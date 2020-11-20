@@ -3,9 +3,8 @@
 namespace App\Controller;
 
 use \App\Model\Tempo\Istanti;
-use \App\Model\Tempo\Istante;
-use \App\Model\Tempo\Giorno;
 use \App\Model\Tempo\Giorni;
+use \App\Model\Cassa\Cassa;
 use \App\Utilita\Utilita;
 
 class Azienda {
@@ -18,6 +17,8 @@ class Azienda {
 
         $giorni_inizio = \DateTime::createFromFormat('d-m-Y H:i:s', '01-01-2020 00:00:00');
         $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '05-01-2020 00:00:00');
+
+        $cassa_iniziale = 100;
         
         // Creazione istanti
         $istanti = new Istanti();
@@ -27,10 +28,10 @@ class Azienda {
         $giorni = new Giorni();
         $giorni->LoadGiorni(Giorni::MakeGiorni($giorni_inizio, $giorni_fine, $istanti));
 
+        // Creazione cassa
+        $cassa = new Cassa($cassa_iniziale);
         
-        Utilita::DumpDie($giorni);
-
-        // Utilita::DumpDie($istanti);
+        Utilita::DumpDie($cassa->GetCassaFormattato());
         
     }
 }
