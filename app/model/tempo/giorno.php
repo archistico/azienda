@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Tempo;
+
+use \App\Model\Tempo\Istanti;
 
 class Giorno {
 
@@ -8,7 +10,7 @@ class Giorno {
     public $giorno_settimana;
     public $istanti;
 
-    public function __construct(\DateTime $data, \App\Model\Istanti $istanti) {
+    public function __construct(\DateTime $data, Istanti $istanti) {
         $this->data = $data;
         $this->giorno_settimana = $this->calcola_giorno_settimana($data);
         $this->istanti = $istanti;

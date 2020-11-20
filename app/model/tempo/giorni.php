@@ -1,6 +1,9 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Tempo;
+
+use \App\Model\Tempo\Istanti;
+use \App\Model\Tempo\Giorno;
 
 class Giorni
 {
@@ -17,7 +20,7 @@ class Giorni
         return $this->lista;
     }
 
-    public function AddGiorno(\App\Model\Giorno $g)
+    public function AddGiorno(Giorno $g)
     {
         $this->lista[] = $g;
     }
@@ -31,7 +34,7 @@ class Giorni
     //        METODI STATICI
     // --------------------------------
 
-    public static function MakeGiorni($inizio, $fine, $istanti)
+    public static function MakeGiorni(\DateTime $inizio, \DateTime $fine, Istanti $istanti)
     {
         $giorni = [];
 
@@ -39,7 +42,7 @@ class Giorni
         $periodo = new \DatePeriod($inizio, $intervallo, $fine);
 
         foreach ($periodo as $dt) {
-            $giorni[] = new \App\Model\Giorno($dt, $istanti);
+            $giorni[] = new Giorno($dt, $istanti);
         }
 
         return $giorni;

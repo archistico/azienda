@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use \App\Model\Istanti;
-use \App\Model\Istante;
-use \App\Model\Giorno;
-use \App\Model\Giorni;
+use \App\Model\Tempo\Istanti;
+use \App\Model\Tempo\Istante;
+use \App\Model\Tempo\Giorno;
+use \App\Model\Tempo\Giorni;
 use \App\Utilita\Utilita;
 
 class Azienda {

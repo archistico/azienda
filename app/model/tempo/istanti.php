@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace App\Model\Tempo;
+
+use App\Model\Tempo\Istante;
 
 class Istanti {
 
@@ -14,7 +16,7 @@ class Istanti {
         return $this->lista;
     }
 
-    public function AddIstante(\App\Model\Istante $i) {
+    public function AddIstante(Istante $i) {
         $this->lista[] = $i;
     }
 
@@ -35,7 +37,7 @@ class Istanti {
             for($c = $inizio; $c < $fine; $c++) {
                 $in = str_pad($c, 2, "0", STR_PAD_LEFT).":00";
                 $out = str_pad($c+1, 2, "0", STR_PAD_LEFT).":00";
-                $istanti[] = new \App\Model\Istante($in, $out);               
+                $istanti[] = new Istante($in, $out);               
             }
         }
 
