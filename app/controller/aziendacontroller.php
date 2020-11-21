@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
-use \App\Model\Tempo\Istanti;
-use \App\Model\Tempo\Giorni;
-use \App\Model\Cassa\Cassa;
-use \App\Utilita\Utilita;
+use App\Model\Tempo\Istanti;
+use App\Model\Tempo\Giorni;
+use App\Model\Cassa\Cassa;
+use App\Model\Magazzino\Magazzino;
+use App\Model\Prodotto\Prodotto;
+use App\Model\Mercato\Fornitore;
+use App\Model\Mercato\Acquirente;
+use App\Model\Mercato\Azienda;
+use App\Utilita\Utilita;
 
-class Azienda {
+class AziendaController {
     public function Homepage() {
         
         // Dati impostazione simulazione
@@ -27,11 +32,17 @@ class Azienda {
         // Creazione giorni
         $giorni = new Giorni();
         $giorni->LoadGiorni(Giorni::MakeGiorni($giorni_inizio, $giorni_fine, $istanti));
-
-        // Creazione cassa
-        $cassa = new Cassa($cassa_iniziale);
         
-        Utilita::DumpDie($cassa->GetCassaFormattato());
+        $mela = new Prodotto("Mela", 0.2, 0.5);
+
+        $fornitore = new Fornitore($mela);
+        $acquirente = new Acquirente();
+
+        $azienda = new Azienda(new Cassa($cassa_iniziale), new Magazzino());
+        $azienda->Compra($fornitore, $mela, 10);
+        $azienda->Vendi($acquirente, $mela, 3);
+
+        Utilita::DumpDie($azienda);
         
     }
 }

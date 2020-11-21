@@ -31,6 +31,6 @@ $f3->set('DEBUG', 3);
 // ----------------------
 //         ROUTE
 // ----------------------
-$f3->route('GET @home: /', '\App\Controller\Azienda->Homepage');
+$f3->route('GET @home: /', '\App\Controller\AziendaController->Homepage');
 
 $f3->run();
