@@ -23,7 +23,7 @@ class AziendaController {
         $giorni_inizio = \DateTime::createFromFormat('d-m-Y H:i:s', '01-01-2020 00:00:00');
         $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '05-01-2020 00:00:00');
 
-        $cassa_iniziale = 100;
+        $cassa_iniziale = 10000;
         
         // Creazione istanti
         $istanti = new Istanti();
