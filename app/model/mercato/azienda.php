@@ -37,4 +37,11 @@ class Azienda {
             }
         }
     }
+
+    public function GetStato() {
+        return [
+            'cassa' => $this->cassa->GetCassaFormattato(),
+            'magazzino' => $this->magazzino->GetValoreMagazzinoFormattato(),
+        ];
+    }
 }
