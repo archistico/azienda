@@ -64,7 +64,7 @@ class Simulazione {
                     $this->azienda->Compra($this->fornitore, $mela, 10);
                 }
 
-                if($giorno_settimana_breve == "Lun" && $istante->inizio == "09:00") {
+                if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
                     $this->azienda->Vendi($this->acquirente, $mela, 3);
                 }
             }
