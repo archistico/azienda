@@ -1,0 +1,10 @@
+#!/bin/bash
+
+ip="127.0.0.1"
+port="8000"
+
+echo "Attivo il server localhost"
+echo "Se non funziona chmod +x server"
+firefox $ip:$port
+
+php -S $ip:$port

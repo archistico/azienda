@@ -25,7 +25,7 @@ if(!function_exists('env')) {
 // ----------------------
 
 $f3 = \Base::instance();
-$f3->set('CACHE', true);
+$f3->set('CACHE', false);
 $f3->set('DEBUG', 3);
 
 // ----------------------

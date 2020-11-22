@@ -1,0 +1,11 @@
+<table class="table">
+    <tbody>
+        <repeat group="{{ @loggers }}" value="{{ @logs }}">
+            <tr>
+                <repeat group="{{ @logs }}" value="{{ @element }}">
+                    <td>{{ @element }}</td>
+                </repeat>
+            </tr>
+        </repeat>
+    </tbody>
+</table>

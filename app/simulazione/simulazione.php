@@ -10,6 +10,8 @@ use App\Model\Prodotto\Prodotto;
 use App\Model\Mercato\Fornitore;
 use App\Model\Mercato\Acquirente;
 use App\Model\Mercato\Azienda;
+use App\Model\Log\Logger;
+use App\Model\Log\Log;
 use App\Utilita\Utilita;
 
 class Simulazione {
@@ -26,8 +28,9 @@ class Simulazione {
         $istanti_fine = 20;
         $istanti_suddivisione = Istanti::$SuddivisioneOraria;
 
+        // Inizio simulazione compreso, fine simulazione escluso
         $giorni_inizio = \DateTime::createFromFormat('d-m-Y H:i:s', '01-01-2020 00:00:00');
-        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '15-01-2020 00:00:00');
+        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '08-01-2020 00:00:00');
 
         
         // Creazione istanti
@@ -52,13 +55,16 @@ class Simulazione {
 
     public function Run() {
         $mela = new Prodotto("Mela", 0.2, 0.5);
+        $logger = new Logger();
 
         foreach($this->giorni->lista as $giorno) {
             $data = $giorno->GetGiorno();
             $giorno_settimana_breve = $giorno->giorno_settimana_breve;
 
             foreach($giorno->istanti->lista as $istante) {
-                echo $data. " ". $istante->GetIstante()."<br>";
+
+                $log = new Log();
+                $log->Aggiungi($data. " ". $istante->GetIstante());
                 
                 if($giorno_settimana_breve == "Lun" && $istante->inizio == "04:00") {
                     $this->azienda->Compra($this->fornitore, $mela, 10);
@@ -67,9 +73,12 @@ class Simulazione {
                 if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
                     $this->azienda->Vendi($this->acquirente, $mela, 3);
                 }
+
+                $logger->Aggiungi($log);
             }
         }
 
-        Utilita::Dump($this->azienda->GetStato());
+        return $logger;
+        //Utilita::Dump($this->azienda->GetStato());
     }
 }
