@@ -67,11 +67,15 @@ class Simulazione {
                 $log->Aggiungi($data. " ". $istante->GetIstante());
                 
                 if($giorno_settimana_breve == "Lun" && $istante->inizio == "04:00") {
-                    $this->azienda->Compra($this->fornitore, $mela, 10);
+                    $op = false;
+                    $op = $this->azienda->Compra($this->fornitore, $mela, 10);
+                    $op?$log->Aggiungi("comprato le mele"):$log->Aggiungi("non comprato le mele");
                 }
 
                 if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
-                    $this->azienda->Vendi($this->acquirente, $mela, 3);
+                    $op = false;
+                    $op = $this->azienda->Vendi($this->acquirente, $mela, 3);
+                    $op?$log->Aggiungi("venduto le mele"):$log->Aggiungi("non ho venduto le mele");
                 }
 
                 $logger->Aggiungi($log);

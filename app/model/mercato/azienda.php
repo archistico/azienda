@@ -25,16 +25,22 @@ class Azienda {
             for ($i = 0; $i < $quantita; $i++) {
                 $this->magazzino->Aggiungi($prodotto);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 
     public function Vendi(Acquirente $acquirente, Prodotto $prodotto, int $quantita) {
         $prezzo = $quantita * $prodotto->GetPrezzo();
-        if($acquirente->ControllaQuantitaInCassa($prezzo)) {
+        if(($acquirente->ControllaQuantitaInCassa($prezzo)) && ($this->magazzino->GetQuantiProdotti($prodotto) >= $quantita)) {
             $this->cassa->Deposita($quantita * $prodotto->GetPrezzo());
             for ($i = 0; $i < $quantita; $i++) {
                 $this->magazzino->Rimuovi($prodotto);
             }
+            return true;
+        } else {
+            return false;
         }
     }
 

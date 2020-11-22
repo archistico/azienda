@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table-bordered">
     <tbody>
         <?php foreach (($loggers?:[]) as $logs): ?>
             <tr>

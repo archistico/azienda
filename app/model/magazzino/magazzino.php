@@ -36,6 +36,16 @@ class Magazzino {
         }
     }
 
+    public function GetQuantiProdotti(Prodotto $prodotto) {
+        $conteggio = 0;
+        foreach($this->lista as $el) {
+            if($el->nome == $prodotto->nome && $el->prezzo == $prodotto->prezzo) {
+                $conteggio++;
+            }
+        }
+        return $conteggio;
+    }
+
     public function GetProdotto($indice) {
         if ($indice < count($this->lista)) {
             return $this->lista[$indice];
