@@ -3,8 +3,16 @@
 ip="127.0.0.1"
 port="8000"
 
-echo "Attivo il server localhost"
-echo "Se non funziona chmod +x server"
+# "Se non funziona chmod +x server"
+
+echo "Attivo il server"
+nohup php -S $ip:$port > phpd.log 2>&1 &
+PHP_SERVER_PID=$!
+echo "kill $PHP_SERVER_PID"
+
+sleep 3s
+
+echo "Apro firefox"
 firefox $ip:$port
 
-php -S $ip:$port
+tail -f phpd.log
