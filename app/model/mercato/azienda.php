@@ -61,9 +61,14 @@ class Azienda {
     }
 
     public function PagaIva() {
-        $this->cassa->Preleva($this->iva->GetIva());
-        $this->iva->SetRegistro(0);
-        return true;
+        if($this->iva->GetIva()>=0) {
+            $this->cassa->Preleva($this->iva->GetIva());
+            $this->iva->SetRegistro(0);
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 
     public function Azione(Giorno $giorno, Istante $istante) {
