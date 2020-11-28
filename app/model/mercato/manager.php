@@ -4,7 +4,7 @@ namespace App\Model\Mercato;
 
 use App\Model\Tempo\Istante;
 
-class Acquirente {
+class Manager {
 
     public function __construct() {
     }

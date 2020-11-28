@@ -7,6 +7,9 @@ use \App\Model\Mercato\Acquirente;
 use \App\Model\Cassa\Cassa;
 use \App\Model\Magazzino\Magazzino;
 use \App\Model\Prodotto\Prodotto;
+use App\Model\Tempo\Istante;
+use App\Model\Tempo\Giorno;
+use App\Model\Risposta\Azione;
 
 class Azienda {
 
@@ -49,5 +52,22 @@ class Azienda {
             'cassa' => $this->cassa->GetCassaFormattato(),
             'magazzino' => $this->magazzino->GetValoreMagazzinoFormattato(),
         ];
+    }
+
+    public function Azione(Giorno $giorno, Istante $istante) {
+
+        $data = $giorno->GetGiorno();
+        $giorno_settimana_breve = $giorno->giorno_settimana_breve;
+
+        if($giorno_settimana_breve == "Lun" && $istante->inizio == "04:00") {
+            return Azione::$COMPRARE;
+        }
+
+        if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
+            return Azione::$VENDERE;
+        }
+
+        return Azione::$NON_FARE_NULLA;
+
     }
 }

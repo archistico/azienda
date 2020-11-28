@@ -12,6 +12,7 @@ use App\Model\Mercato\Acquirente;
 use App\Model\Mercato\Azienda;
 use App\Model\Log\Logger;
 use App\Model\Log\Log;
+use App\Model\Risposta\Azione;
 use App\Utilita\Utilita;
 
 class Simulazione {
@@ -65,14 +66,15 @@ class Simulazione {
 
                 $log = new Log();
                 $log->Aggiungi($data. " ". $istante->GetIstante());
-                
-                if($giorno_settimana_breve == "Lun" && $istante->inizio == "04:00") {
+
+                $azione_azienda = $this->azienda->Azione($giorno, $istante);
+                if($azione_azienda == Azione::$COMPRARE) {
                     $op = false;
                     $op = $this->azienda->Compra($this->fornitore, $mela, 10);
                     $op?$log->Aggiungi("comprato le mele"):$log->Aggiungi("non comprato le mele");
                 }
 
-                if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
+                if($azione_azienda == Azione::$VENDERE) {
                     $op = false;
                     $op = $this->azienda->Vendi($this->acquirente, $mela, 3);
                     $op?$log->Aggiungi("venduto le mele"):$log->Aggiungi("non ho venduto le mele");
