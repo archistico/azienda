@@ -18,11 +18,14 @@ class Giorno {
         $this->istanti = $istanti;
     }
 
-    public function GetGiorno() {
-        $data = $this->data->format('d-m-Y');
+    public function GetGiorno(string $formato = null) {
+        if(is_null($formato)) {
+            $formato = 'd-m-Y';
+        }        
+        $data = $this->data->format($formato);
         return $this->giorno_settimana_breve. " ". $data; 
     }
-
+    
     private function calcola_giorno_settimana(\DateTime $data) {
         $giorno_settimana_numero = $data->format('N');
         switch ($giorno_settimana_numero) {

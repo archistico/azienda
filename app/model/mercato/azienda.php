@@ -2,23 +2,26 @@
 
 namespace App\Model\Mercato;
 
-use \App\Model\Mercato\Fornitore;
-use \App\Model\Mercato\Acquirente;
-use \App\Model\Cassa\Cassa;
-use \App\Model\Magazzino\Magazzino;
-use \App\Model\Prodotto\Prodotto;
+use App\Model\Mercato\Fornitore;
+use App\Model\Mercato\Acquirente;
+use App\Model\Cassa\Cassa;
+use App\Model\Magazzino\Magazzino;
+use App\Model\Prodotto\Prodotto;
 use App\Model\Tempo\Istante;
 use App\Model\Tempo\Giorno;
 use App\Model\Risposta\Azione;
+use App\Model\Tasse\Iva;
 
 class Azienda {
 
     public $cassa;
     public $magazzino;
+    public $iva;
 
     public function __construct(Cassa $cassa, Magazzino $magazzino) {
         $this->cassa = $cassa;
         $this->magazzino = $magazzino;
+        $this->iva = new Iva();
     }
 
     public function Compra(Fornitore $fornitore, Prodotto $prodotto, int $quantita) {
@@ -28,6 +31,7 @@ class Azienda {
             for ($i = 0; $i < $quantita; $i++) {
                 $this->magazzino->Aggiungi($prodotto);
             }
+            $this->iva->CreditoAcquisto($costo);
             return true;
         } else {
             return false;
@@ -41,6 +45,7 @@ class Azienda {
             for ($i = 0; $i < $quantita; $i++) {
                 $this->magazzino->Rimuovi($prodotto);
             }
+            $this->iva->DebitoVendita($prezzo);
             return true;
         } else {
             return false;
@@ -51,16 +56,28 @@ class Azienda {
         return [
             'cassa' => $this->cassa->GetCassaFormattato(),
             'magazzino' => $this->magazzino->GetValoreMagazzinoFormattato(),
+            'iva' => $this->iva->GetRegistroFormattato(),
         ];
+    }
+
+    public function PagaIva() {
+        $this->cassa->Preleva($this->iva->GetIva());
+        $this->iva->SetRegistro(0);
+        return true;
     }
 
     public function Azione(Giorno $giorno, Istante $istante) {
 
-        $data = $giorno->GetGiorno();
+        $numero_giorno_mese = $giorno->GetGiorno('d');
         $giorno_settimana_breve = $giorno->giorno_settimana_breve;
 
         if($giorno_settimana_breve == "Mer" && $istante->inizio == "04:00") {
             return Azione::$COMPRARE;
+        }
+
+        //&& $numero_giorno_mese == "01"
+        if($istante->inizio == "10:00" ) {
+            return Azione::$PAGARE_IVA;
         }
 
         return Azione::$NON_FARE_NULLA;

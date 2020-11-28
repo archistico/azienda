@@ -76,6 +76,14 @@ class Simulazione {
                     $log->Aggiungi("-");
                 }
 
+                if($azione_azienda == Azione::$PAGARE_IVA) {
+                    $op = false;
+                    $op = $this->azienda->PagaIva();
+                    $op?$log->Aggiungi("pagato iva"):$log->Aggiungi("non pagato iva");
+                } else {
+                    $log->Aggiungi("-");
+                }
+
                 $azione_acquirente = $this->acquirente->Azione($giorno, $istante);
                 if($azione_acquirente == Azione::$COMPRARE) {
                     $op = false;
@@ -87,6 +95,7 @@ class Simulazione {
                 
                 $log->Aggiungi("Cassa: ".$this->azienda->cassa->GetCassaFormattato());
                 $log->Aggiungi("Magazzino: ".$this->azienda->magazzino->GetQuantiProdotti($this->mela)." mele");
+                $log->Aggiungi("Iva: ".$this->azienda->iva->GetRegistroFormattato());
 
                 $logger->Aggiungi($log);
             }
