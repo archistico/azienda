@@ -21,7 +21,7 @@ class Simulazione {
     public $azienda;
     public $fornitore;
     public $acquirente;
-    public $prodotto;
+    public $mela;
 
     public function __construct() {
         // Dati impostazione simulazione
@@ -31,7 +31,7 @@ class Simulazione {
 
         // Inizio simulazione compreso, fine simulazione escluso
         $giorni_inizio = \DateTime::createFromFormat('d-m-Y H:i:s', '01-01-2020 00:00:00');
-        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '08-01-2020 00:00:00');
+        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '15-01-2020 00:00:00');
 
         
         // Creazione istanti
@@ -43,8 +43,8 @@ class Simulazione {
         $this->giorni->LoadGiorni(Giorni::MakeGiorni($giorni_inizio, $giorni_fine, $istanti));
 
         // Mercato
-        $mela = new Prodotto("Mela", 0.2, 0.5);
-        $this->fornitore = new Fornitore($mela);
+        $this->mela = new Prodotto("Mela", 1, 2);
+        $this->fornitore = new Fornitore($this->mela);
         $this->acquirente = new Acquirente();
 
         $cassa_iniziale = 10000;
@@ -55,7 +55,7 @@ class Simulazione {
     }
 
     public function Run() {
-        $mela = new Prodotto("Mela", 0.2, 0.5);
+        
         $logger = new Logger();
 
         foreach($this->giorni->lista as $giorno) {
@@ -70,15 +70,23 @@ class Simulazione {
                 $azione_azienda = $this->azienda->Azione($giorno, $istante);
                 if($azione_azienda == Azione::$COMPRARE) {
                     $op = false;
-                    $op = $this->azienda->Compra($this->fornitore, $mela, 10);
+                    $op = $this->azienda->Compra($this->fornitore, $this->mela, 100);
                     $op?$log->Aggiungi("comprato le mele"):$log->Aggiungi("non comprato le mele");
+                } else {
+                    $log->Aggiungi("-");
                 }
 
-                if($azione_azienda == Azione::$VENDERE) {
+                $azione_acquirente = $this->acquirente->Azione($giorno, $istante);
+                if($azione_acquirente == Azione::$COMPRARE) {
                     $op = false;
-                    $op = $this->azienda->Vendi($this->acquirente, $mela, 3);
+                    $op = $this->azienda->Vendi($this->acquirente, $this->mela, 10);
                     $op?$log->Aggiungi("venduto le mele"):$log->Aggiungi("non ho venduto le mele");
+                } else {
+                    $log->Aggiungi("-");
                 }
+                
+                $log->Aggiungi("Cassa: ".$this->azienda->cassa->GetCassaFormattato());
+                $log->Aggiungi("Magazzino: ".$this->azienda->magazzino->GetQuantiProdotti($this->mela)." mele");
 
                 $logger->Aggiungi($log);
             }

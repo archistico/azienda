@@ -59,15 +59,10 @@ class Azienda {
         $data = $giorno->GetGiorno();
         $giorno_settimana_breve = $giorno->giorno_settimana_breve;
 
-        if($giorno_settimana_breve == "Lun" && $istante->inizio == "04:00") {
+        if($giorno_settimana_breve == "Mer" && $istante->inizio == "04:00") {
             return Azione::$COMPRARE;
         }
 
-        if(in_array($giorno_settimana_breve, ["Lun", "Mar", "Mer", "Gio", "Ven"]) && $istante->inizio == "09:00") {
-            return Azione::$VENDERE;
-        }
-
         return Azione::$NON_FARE_NULLA;
-
     }
 }
