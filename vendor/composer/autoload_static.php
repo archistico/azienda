@@ -10,14 +10,9 @@ class ComposerStaticInite54b4e2c446a9f0287988ce1fdc74660
         '45e8c92354af155465588409ef796dbc' => __DIR__ . '/..' . '/bcosca/fatfree/lib/base.php',
     );
 
-    public static $classMap = array (
-        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-    );
-
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInite54b4e2c446a9f0287988ce1fdc74660::$classMap;
 
         }, null, ClassLoader::class);
     }
