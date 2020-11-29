@@ -11,17 +11,21 @@ use App\Model\Tempo\Istante;
 use App\Model\Tempo\Giorno;
 use App\Model\Risposta\Azione;
 use App\Model\Tasse\Iva;
+use App\Model\Tasse\Irpef;
+use App\Utilita\Utilita;
 
 class Azienda {
 
     public $cassa;
     public $magazzino;
     public $iva;
+    public $irpef;
 
     public function __construct(Cassa $cassa, Magazzino $magazzino) {
         $this->cassa = $cassa;
         $this->magazzino = $magazzino;
         $this->iva = new Iva();
+        $this->irpef = new Irpef();
     }
 
     public function Compra(Fornitore $fornitore, Prodotto $prodotto, int $quantita) {
@@ -32,6 +36,7 @@ class Azienda {
                 $this->magazzino->Aggiungi($prodotto);
             }
             $this->iva->CreditoAcquisto($costo);
+            $this->irpef->Spesa($costo);
             return true;
         } else {
             return false;
@@ -46,6 +51,7 @@ class Azienda {
                 $this->magazzino->Rimuovi($prodotto);
             }
             $this->iva->DebitoVendita($prezzo);
+            $this->irpef->Fattura($prezzo);
             return true;
         } else {
             return false;
@@ -61,7 +67,7 @@ class Azienda {
     }
 
     public function PagaIva() {
-        if($this->iva->GetIva()>=0) {
+        if($this->iva->GetIva()>0) {
             $this->cassa->Preleva($this->iva->GetIva());
             $this->iva->SetRegistro(0);
             return true;
@@ -81,7 +87,7 @@ class Azienda {
         }
 
         //&& $numero_giorno_mese == "01"
-        if($istante->inizio == "10:00" ) {
+        if($istante->inizio == "10:00" && $numero_giorno_mese == "01") {
             return Azione::$PAGARE_IVA;
         }
 

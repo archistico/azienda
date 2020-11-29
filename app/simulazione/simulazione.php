@@ -13,6 +13,7 @@ use App\Model\Mercato\Azienda;
 use App\Model\Log\Logger;
 use App\Model\Log\Log;
 use App\Model\Risposta\Azione;
+use App\Model\Tasse\Irpef;
 use App\Utilita\Utilita;
 
 class Simulazione {
@@ -31,7 +32,7 @@ class Simulazione {
 
         // Inizio simulazione compreso, fine simulazione escluso
         $giorni_inizio = \DateTime::createFromFormat('d-m-Y H:i:s', '01-01-2020 00:00:00');
-        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '15-01-2020 00:00:00');
+        $giorni_fine = \DateTime::createFromFormat('d-m-Y H:i:s', '31-05-2020 00:00:00');
 
         
         // Creazione istanti
@@ -51,7 +52,9 @@ class Simulazione {
         
         $this->azienda = new Azienda(new Cassa($cassa_iniziale), new Magazzino());
         
-
+        $t = new Irpef(10000);
+        $irpef = $t->GetIrpef();
+        Utilita::Dump($irpef);
     }
 
     public function Run() {
@@ -59,13 +62,10 @@ class Simulazione {
         $logger = new Logger();
 
         foreach($this->giorni->lista as $giorno) {
-            $data = $giorno->GetGiorno();
-            $giorno_settimana_breve = $giorno->giorno_settimana_breve;
-
             foreach($giorno->istanti->lista as $istante) {
 
                 $log = new Log();
-                $log->Aggiungi($data. " ". $istante->GetIstante());
+                $log->Aggiungi($giorno->giorno_settimana_breve . " " .$giorno->GetGiorno(). " ". $istante->GetIstante());
 
                 $azione_azienda = $this->azienda->Azione($giorno, $istante);
                 if($azione_azienda == Azione::$COMPRARE) {
@@ -95,7 +95,8 @@ class Simulazione {
                 
                 $log->Aggiungi("Cassa: ".$this->azienda->cassa->GetCassaFormattato());
                 $log->Aggiungi("Magazzino: ".$this->azienda->magazzino->GetQuantiProdotti($this->mela)." mele");
-                $log->Aggiungi("Iva: ".$this->azienda->iva->GetRegistroFormattato());
+                $log->Aggiungi("IVA: ".$this->azienda->iva->GetRegistroFormattato());
+                $log->Aggiungi("Imponibile IRPEF: ".$this->azienda->irpef->GetRegistroFormattato());
 
                 $logger->Aggiungi($log);
             }

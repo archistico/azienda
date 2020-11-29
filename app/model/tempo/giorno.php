@@ -23,7 +23,7 @@ class Giorno {
             $formato = 'd-m-Y';
         }        
         $data = $this->data->format($formato);
-        return $this->giorno_settimana_breve. " ". $data; 
+        return $data; 
     }
     
     private function calcola_giorno_settimana(\DateTime $data) {
